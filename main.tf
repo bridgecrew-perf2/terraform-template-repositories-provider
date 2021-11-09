@@ -1,3 +1,3 @@
-module repositories {
-    source = "./definitions"
+module "repositories" {
+  source = "./definitions"
 }
