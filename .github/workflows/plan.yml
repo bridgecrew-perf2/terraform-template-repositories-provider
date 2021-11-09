@@ -1,0 +1,35 @@
+name: Plan Terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  plan:
+    environment: prod
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "."
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.5
+      - name: terraform init
+        id: init
+        run: |
+          terraform init
+      - name: terraform fmt
+        id: fmt
+        run: terraform fmt -check -recursive
+      - name: terraform validate
+        id: validate
+        run: terraform validate
+      - name: terraform plan
+        id: plan
+        run: terraform plan -input=false -compact-warnings
+      - name: terraform show
+        id: show
+        run: terraform show tfplan

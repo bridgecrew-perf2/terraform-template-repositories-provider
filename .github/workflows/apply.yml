@@ -1,0 +1,23 @@
+name: Apply Terraform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  apply:
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.5
+      - name: terraform init
+        id: init
+        run: |
+          terraform init
+      - name: terraform apply
+        id: apply
+        run: terraform apply -input=false -compact-warnings -auto-approve
